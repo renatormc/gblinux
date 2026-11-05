@@ -5,60 +5,26 @@ Ele fica aberto no computador e atende os pedidos de assinatura feitos pela pág
 
 Estas instruções são para Ubuntu 24.04 ou mais novo e derivados, como Linux Mint e Pop!_OS.
 
-## Instalação pelo pacote .deb (recomendada)
+## Instalação
 
-O pacote instala tudo de uma vez: driver do token, programa e entrada no menu de aplicativos. Não é
-preciso ter o Python. Baixe o arquivo `.deb` da
-[última versão](https://github.com/renatormc/gblinux/releases/latest) e, na pasta onde ele está, rode:
+Copie e cole este comando no terminal, sem `sudo`. Ele instala o pipx, o assinador, o driver do token e
+a entrada no menu de aplicativos, e pede a senha do `sudo` quando precisar.
 
 ```bash
-sudo apt install ./gblinux_*_amd64.deb
+curl -fsSL https://raw.githubusercontent.com/renatormc/gblinux/master/install.sh | bash
 ```
 
 Depois, retire o token, conecte de novo e abra o **Assinador de PDF** pelo menu. Veja
 [Como usar](#como-usar).
 
-Para atualizar, repita o comando com o arquivo novo. Para desinstalar, use
-`sudo apt remove gblinux`.
+Se o terminal disser que o `curl` não foi encontrado, instale-o com `sudo apt install curl`.
 
-Se você já instalou o assinador pelo pipx, antes rode `gblinux --remover-atalho` e
-`pipx uninstall gblinux`.
+## Instalação por etapas
 
-## Instalação manual
-
-Siga estes passos somente se não for usar o pacote `.deb`. É preciso ter o Python 3.11 ou mais novo;
+Siga estes passos somente se não quiser usar o comando acima. É preciso ter o Python 3.11 ou mais novo;
 para conferir a versão, use `python3 --version`.
 
-## 1. Instale o driver do token
-
-```bash
-sudo apt update
-sudo apt install -y pcscd libpcsclite1 libccid pcsc-tools opensc libnss3-tools
-
-
-cd ~/Downloads
-
-# 1. Baixar e extrair o pacote oficial do ePass 2003
-curl -O "https://site.solutinet.com.br/drivers/Token/ePass2003/Linux/ePass2003_Castle_20141128.tar.gz"
-tar -zxvf ePass2003_Castle_20141128.tar.gz
-
-# 2. Copiar para /usr/lib no formato esperado pelo Assinador Serpro
-sudo rm -rf /usr/lib/ePass2003-Linux-x64
-sudo cp -rf ~/Downloads/ePass2003-Castle-20141128 /usr/lib/ePass2003-Linux-x64
-
-# 3. Criar atalhos da biblioteca PKCS#11 (libcastle.so.1.0.0) em /usr/lib
-sudo cp /usr/lib/ePass2003-Linux-x64/x86_64/redist/libcastle.so.1.0.0 /usr/lib/
-sudo ln -sf /usr/lib/libcastle.so.1.0.0 /usr/lib/libcastle.so
-
-# 4. Configurar regras USB (udev) e reiniciar o daemon pcscd
-sudo sh /usr/lib/ePass2003-Linux-x64/x86_64/config/config.sh
-sudo systemctl enable --now pcscd.socket
-sudo systemctl restart pcscd
-```
-
-Depois disso, retire o token e conecte de novo.
-
-## 2. Instale o pipx
+## 1. Instale o pipx
 
 ```bash
 sudo apt update
@@ -68,11 +34,22 @@ pipx ensurepath
 
 Depois disso, **feche o terminal e abra outro**.
 
-## 3. Instale o assinador
+## 2. Instale o assinador
 
 ```bash
 pipx install gblinux
 ```
+
+## 3. Instale o driver do token
+
+```bash
+gblinux install-drive
+```
+
+O comando pede a senha do `sudo`. Depois disso, retire o token e conecte de novo.
+
+Se preferir instalar o driver à mão, veja o
+[procedimento manual](https://github.com/renatormc/gblinux/blob/master/DRIVER.md).
 
 ## 4. Crie a entrada no menu de aplicativos
 
@@ -115,13 +92,13 @@ O arquivo assinado é salvo na mesma pasta, como `arquivo-assinado.pdf`.
 | `O assinador já está aberto` | Procure a janela que já está aberta |
 | Aviso de porta ocupada | Feche o assinador antigo ou o outro programa que usa as portas 3399 e 4499 |
 
-## Atualizar a instalação manual
+## Atualizar
 
 ```bash
 pipx upgrade gblinux
 ```
 
-## Desinstalar a instalação manual
+## Desinstalar
 
 ```bash
 gblinux --remover-atalho

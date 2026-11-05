@@ -1,6 +1,6 @@
 [project]
 name = "gblinux"
-version = "0.1.1"
+version = "0.1.2"
 description = "Assinador de PDF com token A3 ICP-Brasil para Linux"
 readme = "README.md"
 authors = [

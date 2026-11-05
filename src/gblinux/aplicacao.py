@@ -13,6 +13,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from . import config as configuracao
 from . import erros
 from .atalho import instalar_atalho, remover_atalho
+from .driver import ErroDriver, instalar_driver
 from .interface import JanelaPrincipal, PerguntasQt
 from .servico import ServicoAssinatura, workers_vivos
 from .servidor import Contexto, PortaOcupada, Servidores
@@ -31,7 +32,17 @@ def main() -> int:
     argumentos.add_argument(
         "--remover-atalho", action="store_true", help="remove o atalho do menu de aplicativos e sai"
     )
+    comandos = argumentos.add_subparsers(dest="comando")
+    comandos.add_parser("install-drive", help="instala o driver do token (pede a senha do sudo) e sai")
     opcoes = argumentos.parse_args()
+    if opcoes.comando == "install-drive":
+        try:
+            instalar_driver()
+        except ErroDriver as erro:
+            print(erro, file=sys.stderr)
+            return 1
+        print("Driver instalado. Retire o token e conecte de novo.")
+        return 0
     if opcoes.instalar_atalho:
         print(f"Atalho criado em {instalar_atalho()}")
         return 0
