@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Ambiente e ferramentas
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Pacotes gerados
+build/
+dist/
+
+# Editores e sistema
+.vscode/
+.idea/
+.DS_Store
+
+# Segredos
+.env
+.pypirc
+
+# Documento interno, não pode ser publicado
+spec.md
