@@ -53,6 +53,35 @@ Os testes usam somente SoftHSM, nunca o token real. A contagem de `C_Login` usa 
 pacote `opensc`. Sem SoftHSM, os testes que dependem dele são ignorados. Os testes do programa
 completo usam as portas 3399 e 4499, e são ignorados se elas estiverem ocupadas.
 
+## Pacote .deb
+
+Só é preciso ter o Docker. Para mudar a versão do pacote, altere `version` no `pyproject.toml`.
+
+```bash
+empacotamento/construir-deb.sh   # gera dist/gblinux_<versão>_amd64.deb
+empacotamento/testar-deb.sh      # instala em Ubuntu 24.04 e 26.04 limpos, sem token real
+```
+
+O pacote leva o Python e as dependências do `uv.lock` em `/opt/gblinux`, pois o apt não tem as versões
+exigidas. O driver é baixado durante a construção e conferido por SHA-256; ele não fica no repositório.
+O readme do fabricante não dá permissão explícita de redistribuição, então confirme isso antes de
+publicar o `.deb`.
+
+Se uma biblioteca nova do sistema for necessária, o `testar-deb.sh` lista o que falta. Acrescente o
+pacote correspondente em `Depends`, no arquivo `empacotamento/debian/control.in`.
+
+### Publicar uma versão
+
+Altere `version` no `pyproject.toml`, faça o commit e envie uma tag com a mesma versão:
+
+```bash
+git tag v0.1.2
+git push origin master v0.1.2
+```
+
+O workflow `.github/workflows/release-deb.yml` gera e testa o pacote e, se tudo passar, cria a release
+no GitHub com o `.deb` anexado. Se a tag for diferente da versão, nada é publicado.
+
 ## Primeiro teste com o token real
 
 A inicialização do driver, o casamento da chave e o mecanismo de assinatura só podem ser confirmados com o token. **Cada senha

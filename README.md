@@ -3,8 +3,31 @@
 Programa para Linux que assina documentos PDF com certificado digital ICP-Brasil A3 em token USB.
 Ele fica aberto no computador e atende os pedidos de assinatura feitos pela página web do sistema.
 
-Estas instruções são para Ubuntu 24.04 ou mais novo e derivados, como Linux Mint e Pop!_OS. É
-preciso ter o Python 3.11 ou mais novo; para conferir a versão, use `python3 --version`.
+Estas instruções são para Ubuntu 24.04 ou mais novo e derivados, como Linux Mint e Pop!_OS.
+
+## Instalação pelo pacote .deb (recomendada)
+
+O pacote instala tudo de uma vez: driver do token, programa e entrada no menu de aplicativos. Não é
+preciso ter o Python. Baixe o arquivo `.deb` da
+[última versão](https://github.com/renatormc/gblinux/releases/latest) e, na pasta onde ele está, rode:
+
+```bash
+sudo apt install ./gblinux_*_amd64.deb
+```
+
+Depois, retire o token, conecte de novo e abra o **Assinador de PDF** pelo menu. Veja
+[Como usar](#como-usar).
+
+Para atualizar, repita o comando com o arquivo novo. Para desinstalar, use
+`sudo apt remove gblinux`.
+
+Se você já instalou o assinador pelo pipx, antes rode `gblinux --remover-atalho` e
+`pipx uninstall gblinux`.
+
+## Instalação manual
+
+Siga estes passos somente se não for usar o pacote `.deb`. É preciso ter o Python 3.11 ou mais novo;
+para conferir a versão, use `python3 --version`.
 
 ## 1. Instale o driver do token
 
@@ -92,13 +115,13 @@ O arquivo assinado é salvo na mesma pasta, como `arquivo-assinado.pdf`.
 | `O assinador já está aberto` | Procure a janela que já está aberta |
 | Aviso de porta ocupada | Feche o assinador antigo ou o outro programa que usa as portas 3399 e 4499 |
 
-## Atualizar
+## Atualizar a instalação manual
 
 ```bash
 pipx upgrade gblinux
 ```
 
-## Desinstalar
+## Desinstalar a instalação manual
 
 ```bash
 gblinux --remover-atalho

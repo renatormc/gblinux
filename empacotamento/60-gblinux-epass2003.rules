@@ -1,0 +1,2 @@
+# Permite que o usuário comum acesse o token ePass2003, como faz o config.sh do fabricante.
+SUBSYSTEM=="usb", ATTR{idVendor}=="096e", MODE="0666"

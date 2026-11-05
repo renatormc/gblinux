@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|purge)
+        # Sobras criadas fora do pacote, como bytecode gerado em execução como root.
+        rm -rf /opt/gblinux
+        if command -v udevadm >/dev/null 2>&1; then
+            udevadm control --reload-rules || true
+        fi
+        ;;
+esac
+
+exit 0
